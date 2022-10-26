@@ -1,0 +1,11 @@
+/*.csproj
+/.vsconfig
+/Temp
+/obj
+/Library
+/Logs
+/.vs
+/*.sln
+/*.user
+~*.xlsx
+~*.xlsx.meta
