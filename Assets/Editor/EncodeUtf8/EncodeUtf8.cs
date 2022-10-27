@@ -36,7 +36,7 @@ public class EncodeUtf8 : Editor
             if (crlf_text.IndexOf("\r\n") >= 0)
             {
                 crlf_text = crlf_text.Replace("\r\n", "\n");
-                Debug.Log($"{Path.GetFileName(path)}: \\r\\n -> \\n");
+                Debug.Log($"{Path.GetFileName(path)}: CRLF -> LF");
                 File.WriteAllText(path, crlf_text, Encoding.UTF8);
             }
         }

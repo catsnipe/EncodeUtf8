@@ -43,7 +43,7 @@ public class OnPostprocessEncodeUtf8 : AssetPostprocessor
             if (crlf_text.IndexOf("\r\n") >= 0)
             {
                 crlf_text = crlf_text.Replace("\r\n", "\n");
-                Debug.Log($"{Path.GetFileName(asset)}: \\r\\n -> \\n");
+                Debug.LogWarning($"CRLF -> LF: {asset}");
                 File.WriteAllText(asset, crlf_text, Encoding.UTF8);
             }
         }
