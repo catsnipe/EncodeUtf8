@@ -27,9 +27,17 @@ public class EncodeUtf8 : Editor
 
             if (enc != Encoding.UTF8)
             {
-                text = File.ReadAllText(path, Encoding.GetEncoding("shift-jis")).Replace("\r\n", "\n");
+                text = File.ReadAllText(path, Encoding.GetEncoding("shift-jis"));
                 Debug.Log($"{Path.GetFileName(path)}: {enc} -> UTF8");
                 File.WriteAllText(path, text, Encoding.UTF8);
+            }
+
+            var crlf_text = File.ReadAllText(path);
+            if (crlf_text.IndexOf("\r\n") >= 0)
+            {
+                crlf_text = crlf_text.Replace("\r\n", "\n");
+                Debug.Log($"{Path.GetFileName(path)}: \\r\\n -> \\n");
+                File.WriteAllText(path, crlf_text, Encoding.UTF8);
             }
         }
     }

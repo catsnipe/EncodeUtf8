@@ -22,20 +22,29 @@ public class OnPostprocessEncodeUtf8 : AssetPostprocessor
             }
 
             var bs  = File.ReadAllBytes(asset);
-            // UTF8 with BOM
             if((bs[0] == 0xEF) && (bs[1] == 0xBB) && (bs[2] == 0xBF))
             {
-                continue;
+                // UTF8 with BOM
+            }
+            else
+            {
+                var enc = EncodeUtf8.GetEncode(bs);
+
+                if(enc != Encoding.UTF8)
+                {
+                    var text = enc.GetString(bs);
+
+                    File.WriteAllText(asset, text, Encoding.UTF8);
+                    Debug.LogWarning("Convert to UTF-8: " + asset);
+                }
             }
 
-            var enc = EncodeUtf8.GetEncode(bs);
-
-            if(enc != Encoding.UTF8)
+            var crlf_text = File.ReadAllText(asset);
+            if (crlf_text.IndexOf("\r\n") >= 0)
             {
-                var text = enc.GetString(bs).Replace("\r\n", "\n");
-
-                File.WriteAllText(asset, text, Encoding.UTF8);
-                Debug.LogWarning("Convert to UTF-8: " + asset);
+                crlf_text = crlf_text.Replace("\r\n", "\n");
+                Debug.Log($"{Path.GetFileName(asset)}: \\r\\n -> \\n");
+                File.WriteAllText(asset, crlf_text, Encoding.UTF8);
             }
         }
     }
