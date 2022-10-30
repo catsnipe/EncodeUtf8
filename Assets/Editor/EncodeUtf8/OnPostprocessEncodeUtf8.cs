@@ -7,12 +7,16 @@ using UnityEditor;
 /// 新規スクリプト生成時にテキストエンコードを UTF8 に矯正します
 /// </summary>
 public class OnPostprocessEncodeUtf8 : AssetPostprocessor
-{	
+{
     public static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetsPath)
     {
         foreach(string asset in importedAssets)
         {
             if (Path.GetExtension(asset) != ".cs")
+            {
+                continue;
+            }
+            if (asset.IndexOf("Assets/") != 0)
             {
                 continue;
             }
@@ -29,7 +33,6 @@ public class OnPostprocessEncodeUtf8 : AssetPostprocessor
             else
             {
                 var enc = EncodeUtf8.GetEncode(bs);
-
                 if(enc != Encoding.UTF8)
                 {
                     var text = enc.GetString(bs);

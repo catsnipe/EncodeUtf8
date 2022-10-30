@@ -20,7 +20,11 @@ public class EncodeUtf8 : Editor
 
         foreach (var file in files)
         {
+#if UNITY_STANDALONE_WIN
             var    path = $"{Application.dataPath}{file.Remove(0, 6)}".Replace("/", "\\");
+#else
+            var    path = $"{Application.dataPath}{file.Remove(0, 6)}".Replace("\\", "/");
+#endif
 
             var    enc  = GetEncode(File.ReadAllBytes(path));
             string text;
@@ -66,7 +70,7 @@ public class EncodeUtf8 : Editor
         for(int i=0; i<len; i++)
         {
             b1 = bytes[i];
-                
+
             if(b1 <= 0x06 || b1 == 0x7F || b1 == 0xFF)
             {
                 // 'binary'
@@ -134,13 +138,13 @@ public class EncodeUtf8 : Editor
                 if (i < len - 3)
                 {
                     b4 = bytes[i + 3];
-                        
+
                     if (b2 == bDollar && b3 == bOpen && b4 == bD)
                     {
                         //JIS_0212
                         return System.Text.Encoding.GetEncoding(50220);
                     }
-                        
+
                     if (i < len - 5 && b2 == bAnd && b3 == bAt && b4 == bEscape && bytes[i + 4] == bDollar && bytes[i + 5] == bB)
                     {
                         //JIS_0208 1990
@@ -172,7 +176,7 @@ public class EncodeUtf8 : Editor
         {
             b1 = bytes[i];
             b2 = bytes[i + 1];
-                
+
             if(((0xA1 <= b1 && b1 <= 0xFE) && (0xA1 <= b2 && b2 <= 0xFE)) || (b1 == 0x8E && (0xA1 <= b2 && b2 <= 0xDF)))
             {
                 // EUC_C
@@ -183,7 +187,7 @@ public class EncodeUtf8 : Editor
             else if(i < len - 2)
             {
                 b3 = bytes[i + 2];
-                    
+
                 if(b1 == 0x8F && (0xA1 <= b2 && b2 <= 0xFE) && (0xA1 <= b3 && b3 <= 0xFE))
                 {
                     // EUC_0212
